@@ -7,23 +7,22 @@ function App() {
   const [repositories, setRepositories] = useState([]);
 
   useEffect(()=>{
-    api.get('/repositories').then(res=>{
+    api.get('repositories').then(res=>{
       setRepositories(res.data);
     });
-  }, [repositories]);
+  }, []);
 
   async function handleAddRepository() {
-    api.post('/repositories', {title: 'Teste React', url: 'http:localhost//', techs: ['reactjs']}).then(res=>{
-        repositories.push(res.data);
-        setRepositories(repositories);
+    api.post('repositories', {title: 'Teste React', url: 'http:localhost//', techs: ['reactjs']}).then(res=>{
+        setRepositories([...repositories, res.data]);
       
     });
   }
 
   async function handleRemoveRepository(id) {
-    api.delete(`/repositories/${id}`);
-    api.get('/repositories').then(res=>{
-      setRepositories(res.data);
+    api.delete(`repositories/${id}`).then(()=>{
+      const repos = repositories.splice(id,1);
+      setRepositories(repos);
     });
   }
   return (
